@@ -120,7 +120,25 @@ async function vote(team) {
       /*
        * ++++ YOUR CODE HERE ++++
        */
-      window.alert(`Not implemented yet!`);
+      const formData = new URLSearchParams();
+      formData.append("team", team);
+
+      const response = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Authorization": `Bearer ${token}`
+        },
+        body: formData.toString()
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        console.log("Vote failed:", error);
+        window.alert("Failed to submit vote: " + (error.detail || "Unknown error"));
+      }
 
     } catch (err) {
       console.log(`Error when submitting vote: ${err}`);
